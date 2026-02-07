@@ -1,6 +1,6 @@
 
 
-# Simple calculator
+# simple calculator
 
 def add(x, y):
     return x + y
