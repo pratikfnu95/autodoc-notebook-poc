@@ -25,8 +25,8 @@ stg_df = spark.sql("""
         WHEN pol.IsFullyEarned_newValue = 'Yes' THEN Y
         ELSE N
     END AS is_fully_earned_ind,
-    CAST(pol.WrittenPremium_newValue AS DECIMAL(18,2)) -
-    CAST(pol.WrittenPremium_oldValue AS DECIMAL(18,2)) AS premium_change_amt,
+    CAST(pol.WrittenPremium_newValue AS DECIMAL(18,3)) -
+    CAST(pol.WrittenPremium_oldValue AS DECIMAL(18,3)) AS premium_change_amt,
     current_timestamp() AS load_ts
     FROM vw_policy_xml_raw pol
     LEFT JOIN vw_account_xml_raw acc
