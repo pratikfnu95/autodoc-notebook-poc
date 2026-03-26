@@ -1,5 +1,5 @@
 # Databricks notebook source
-# Databricks Notebook for policy transactions
+# Databricks Notebook for policy transaction
 
 from pyspark.sql import functions as F
 from pyspark.sql.window import Window
