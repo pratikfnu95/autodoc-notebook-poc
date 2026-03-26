@@ -1,5 +1,5 @@
 # Databricks notebook source
-# Databricks notebook
+# Databricks Notebook
 
 from pyspark.sql import functions as F
 from pyspark.sql.window import Window
