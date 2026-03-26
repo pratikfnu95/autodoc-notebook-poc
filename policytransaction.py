@@ -22,8 +22,8 @@ stg_df = spark.sql("""
     CAST(pol.AnnualPremium_newValue AS DECIMAL(18,2)) AS annual_premium,
     pol.State_newValue AS state,
     CASE
-        WHEN pol.IsFullyEarned_newValue = 'Y' THEN 1
-        ELSE 0
+        WHEN pol.IsFullyEarned_newValue = 'Yes' THEN Y
+        ELSE N
     END AS is_fully_earned_ind,
     CAST(pol.WrittenPremium_newValue AS DECIMAL(18,2)) -
     CAST(pol.WrittenPremium_oldValue AS DECIMAL(18,2)) AS premium_change_amt,
