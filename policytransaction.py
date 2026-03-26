@@ -18,8 +18,8 @@ stg_df = spark.sql("""
     acc.Producercode_newValue AS producer_code,
     CAST(pol.DeckNumber_newValue AS INT) AS deck_number,
     CAST(pol.TransactionEffectiveDate_newValue AS DATE) AS transaction_effective_date,
-    CAST(pol.WrittenPremium_newValue AS DECIMAL(18,4)) AS written_premium,
-    CAST(pol.AnnualPremium_newValue AS DECIMAL(18,4)) AS annual_premium,
+    CAST(pol.WrittenPremium_newValue AS DECIMAL(18,2)) AS written_premium,
+    CAST(pol.AnnualPremium_newValue AS DECIMAL(18,2)) AS annual_premium,
     pol.State_newValue AS state,
     CASE
         WHEN pol.IsFullyEarned_newValue = 'Eligible' THEN Y
