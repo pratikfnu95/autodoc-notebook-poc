@@ -15,6 +15,7 @@ stg_df = spark.sql("""
     pol.PolicyNumber_newValue AS policy_number,
     pol.PolicyRef_newValue AS policy_ref,
     acc.AccountNumber_newValue AS account_number,
+    --added producer code
     acc.Producercode_newValue AS producer_code,
     CAST(pol.DeckNumber_newValue AS INT) AS deck_number,
     CAST(pol.TransactionEffectiveDate_newValue AS TIMESTAMP) AS transaction_effective_date,
