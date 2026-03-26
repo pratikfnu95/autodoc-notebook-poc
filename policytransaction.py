@@ -15,7 +15,7 @@ stg_df = spark.sql("""
     pol.PolicyNumber_newValue AS policy_number,
     pol.PolicyRef_newValue AS policy_ref,
     acc.AccountNumber_newValue AS account_number,
-    acc.ProducerCode_newValue AS producer_code,
+    acc.Producercode_newValue AS producer_code,
     CAST(pol.DeckNumber_newValue AS INT) AS deck_number,
     CAST(pol.TransactionEffectiveDate_newValue AS DATE) AS transaction_effective_date,
     CAST(pol.WrittenPremium_newValue AS DECIMAL(18,2)) AS written_premium,
@@ -63,6 +63,7 @@ final_df.createOrReplaceTempView("vw_policy_transaction_stage")
 # MAGIC    UPDATE SET
 # MAGIC      t.policy_ref = s.policy_ref,
 # MAGIC      t.deck_number = s.deck_number,
+# MAGIC      t.account_number = s.account_number,
 # MAGIC      t.written_premium = s.written_premium,
 # MAGIC      t.annual_premium = s.annual_premium,
 # MAGIC      t.premium_change_amt = s.premium_change_amt,
