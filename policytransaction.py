@@ -12,21 +12,25 @@ from pyspark.sql.window import Window
 
 stg_df = spark.sql("""
     SELECT
-        PolicyNumber_newValue AS policy_number,
-        PolicyRef_newValue AS policy_ref,
-        CAST(DeckNumber_newValue AS INT) AS deck_number,
-        CAST(TransactionEffectiveDate_newValue AS DATE) AS transaction_effective_date,
-        CAST(WrittenPremium_newValue AS DECIMAL(18,2)) AS written_premium,
-        CAST(AnnualPremium_newValue AS DECIMAL(18,2)) AS annual_premium,
-        State_newValue AS state,
-        CASE
-            WHEN IsFullyEarned_newValue = 'Y' THEN 1
-            ELSE 0
-        END AS is_fully_earned_ind,
-        CAST(AnnualPremium_newValue AS DECIMAL(18,2)) -
-        CAST(WrittenPremium_newValue AS DECIMAL(18,2)) AS premium_change_amt,
-        current_timestamp() AS load_ts
-    FROM vw_policy_xml_raw
+    pol.PolicyNumber_newValue AS policy_number,
+    pol.PolicyRef_newValue AS policy_ref,
+    acc.AccountNumber_newValue AS account_number,
+    acc.ProducerCode_newValue AS producer_code,
+    CAST(pol.DeckNumber_newValue AS INT) AS deck_number,
+    CAST(pol.TransactionEffectiveDate_newValue AS DATE) AS transaction_effective_date,
+    CAST(pol.WrittenPremium_newValue AS DECIMAL(18,2)) AS written_premium,
+    CAST(pol.AnnualPremium_newValue AS DECIMAL(18,2)) AS annual_premium,
+    pol.State_newValue AS state,
+    CASE
+        WHEN pol.IsFullyEarned_newValue = 'Y' THEN 1
+        ELSE 0
+    END AS is_fully_earned_ind,
+    CAST(pol.WrittenPremium_newValue AS DECIMAL(18,2)) -
+    CAST(pol.WrittenPremium_oldValue AS DECIMAL(18,2)) AS premium_change_amt,
+    current_timestamp() AS load_ts
+    FROM vw_policy_xml_raw pol
+    LEFT JOIN vw_account_xml_raw acc
+        ON pol.PolicyRef_newValue = acc.PolicyRef_newValue;
 """)
 
 # Step 3: Deduplicate latest record by policy and transaction date
