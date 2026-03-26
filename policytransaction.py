@@ -4,36 +4,30 @@
 from pyspark.sql import functions as F
 from pyspark.sql.window import Window
 
-# Step 1: Read raw XML-flattened table
-src_df = spark.sql("""
-    SELECT
-        PolicyNumber_newValue,
-        PolicyRef_newValue,
-        DeckNumber_newValue,
-        TransactionEffectiveDate_newValue,
-        WrittenPremium_newValue,
-        AnnualPremium_newValue,
-        State_newValue,
-        IsFullyEarned_newValue
-    FROM raw.policy_xml
-""")
+# COMMAND ----------
 
-# Step 2: Map XML newValue attributes to business columns
-stg_df = (
-    src_df
-    .select(
-        F.col("PolicyNumber_newValue").alias("policy_number"),
-        F.col("PolicyRef_newValue").alias("policy_ref"),
-        F.col("DeckNumber_newValue").cast("int").alias("deck_number"),
-        F.to_date("TransactionEffectiveDate_newValue").alias("transaction_effective_date"),
-        F.col("WrittenPremium_newValue").cast("decimal(18,2)").alias("written_premium"),
-        F.col("AnnualPremium_newValue").cast("decimal(18,2)").alias("annual_premium"),
-        F.col("State_newValue").alias("state"),
-        F.when(F.col("IsFullyEarned_newValue") == "Y", F.lit(1)).otherwise(F.lit(0)).alias("is_fully_earned_ind")
-    )
-    .withColumn("premium_change_amt", F.col("annual_premium") - F.col("written_premium"))
-    .withColumn("load_ts", F.current_timestamp())
-)
+# MAGIC %run ./temp_view
+
+# COMMAND ----------
+
+stg_df = spark.sql("""
+    SELECT
+        PolicyNumber_newValue AS policy_number,
+        PolicyRef_newValue AS policy_ref,
+        CAST(DeckNumber_newValue AS INT) AS deck_number,
+        CAST(TransactionEffectiveDate_newValue AS DATE) AS transaction_effective_date,
+        CAST(WrittenPremium_newValue AS DECIMAL(18,2)) AS written_premium,
+        CAST(AnnualPremium_newValue AS DECIMAL(18,2)) AS annual_premium,
+        State_newValue AS state,
+        CASE
+            WHEN IsFullyEarned_newValue = 'Y' THEN 1
+            ELSE 0
+        END AS is_fully_earned_ind,
+        CAST(AnnualPremium_newValue AS DECIMAL(18,2)) -
+        CAST(WrittenPremium_newValue AS DECIMAL(18,2)) AS premium_change_amt,
+        current_timestamp() AS load_ts
+    FROM vw_policy_xml_raw
+""")
 
 # Step 3: Deduplicate latest record by policy and transaction date
 window_spec = (
