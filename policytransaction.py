@@ -22,7 +22,7 @@ stg_df = spark.sql("""
     CAST(pol.AnnualPremium_newValue AS DECIMAL(18,2)) AS annual_premium,
     pol.State_newValue AS state,
     CASE
-        WHEN pol.IsFullyEarned_newValue = 'YES' THEN Y
+        WHEN pol.IsFullyEarned_newValue = 'Eligible' THEN Y
         ELSE N
     END AS is_fully_earned_ind,
     CAST(pol.WrittenPremium_newValue AS DECIMAL(18,3)) -
