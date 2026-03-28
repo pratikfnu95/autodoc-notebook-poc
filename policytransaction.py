@@ -16,7 +16,7 @@ stg_df = spark.sql("""
     pol.PolicyRef_newValue AS policy_ref,
     acc.AccountNumber_newValue AS account_number,
     acc.Producercode_newValue AS producer_code,
-    CAST(pol.DeckNumber_newValue AS STRING) AS deck_number,
+    CAST(pol.DeckNumber_newValue AS INT) AS deck_number,
     CAST(pol.TransactionEffectiveDate_newValue AS TIMESTAMP) AS transaction_effective_date,
     CAST(pol.WrittenPremium_newValue AS DECIMAL(18,2)) AS written_premium,
     CAST(pol.AnnualPremium_newValue AS DECIMAL(18,2)) AS annual_premium,
