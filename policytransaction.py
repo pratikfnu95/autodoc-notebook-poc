@@ -1,5 +1,5 @@
 # Databricks notebook source
-# stage policy transaction data 
+# databricks notebook - stage policy transaction data 
 
 from pyspark.sql import functions as F
 from pyspark.sql.window import Window
