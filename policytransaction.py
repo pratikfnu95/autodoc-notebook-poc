@@ -7,7 +7,7 @@ import re
 
 # COMMAND ----------
 
-# MAGIC %run ./temp_view
+# MAGIC %run ./staging_transformations_logic
 
 # COMMAND ----------
 
