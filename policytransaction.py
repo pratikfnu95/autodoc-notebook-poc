@@ -7,6 +7,7 @@ import re
 
 # COMMAND ----------
 
+# DBTITLE 1,dependent file
 # MAGIC %run ./staging_transformations_logic
 
 # COMMAND ----------
